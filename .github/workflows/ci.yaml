@@ -27,6 +27,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag crac5:$(date +%s)
+
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
       #  with:
