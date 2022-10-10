@@ -16,7 +16,7 @@ RUN  chmod +x /opt/app/start-docker.sh
 
 COPY build/libs/crac5-17.0.0.jar /opt/app/crac5-17.0.0.jar
 
-CMD ["docker exec -it -u root crac5 java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-17.0.0.jar"]
+#CMD ["docker exec -it -u root crac5 java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-17.0.0.jar"]
 
 #CMD ["/bin/bash"]
 
