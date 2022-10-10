@@ -1,0 +1,34 @@
+---
+name: Java CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17.0.4.1
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+        env:
+          FOOJAY_API_ENVIRONMENT: ci
+          FOOJAY_MQTT_BROKER: ${{ secrets.FOOJAY_MQTT_BROKER }}
+          FOOJAY_MQTT_PORT: ${{ secrets.FOOJAY_MQTT_PORT }}
+          FOOJAY_MQTT_USER: ${{ secrets.FOOJAY_MQTT_USER }}
+          FOOJAY_MQTT_PASSWORD: ${{ secrets.FOOJAY_MQTT_PASSWORD }}
+      - name: Publish to docker hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: hansolo/discoupdater
+          #tags: ${{github.run_number}}
+          tags: latest
+
+...
