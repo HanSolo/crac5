@@ -4,30 +4,33 @@ name: Java CI
 on: [push]
 
 jobs:
-  test:
+  CRaC5:
     runs-on: ubuntu-20.04
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
+      - run: |
+          download_url="https://github.com/CRaC/openjdk-builds/releases/download/17-crac%2B3/openjdk-17-crac+3_linux-x64.tar.gz"
+          wget -O $RUNNER_TEMP/java_package.tar.gz $download_url
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17.0.2
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/java_package.tar.gz
+          java-version: '17.0.2'
+          architecture: x64
+
+      #- run: java -cp java HelloWorldApp
+      - run: java -version
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-        env:
-          FOOJAY_API_ENVIRONMENT: ci
-          FOOJAY_MQTT_BROKER: ${{ secrets.FOOJAY_MQTT_BROKER }}
-          FOOJAY_MQTT_PORT: ${{ secrets.FOOJAY_MQTT_PORT }}
-          FOOJAY_MQTT_USER: ${{ secrets.FOOJAY_MQTT_USER }}
-          FOOJAY_MQTT_PASSWORD: ${{ secrets.FOOJAY_MQTT_PASSWORD }}
       - name: Publish to docker hub
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          repository: hansolo/discoupdater
+          repository: hansolo/crac5
           #tags: ${{github.run_number}}
           tags: latest
 
