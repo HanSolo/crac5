@@ -5,6 +5,7 @@ import jdk.crac.*;
 
 
 import java.io.IOException;
+import java.util.logging.Logger;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,6 +47,7 @@ public class Main implements Resource {
     private static final DateTimeFormatter           FORMATTER        = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private        final Path                        cracFilesFolder  = Paths.get(CRAC_FILES);
     private        final GenericCache<Long, Boolean> primeCache;
+    private        final Logger                      logger;
     private              boolean                     createCheckpoint = false;
     private              int                         counter;
     private              Runnable                    task;
@@ -55,22 +57,24 @@ public class Main implements Resource {
 
     // ******************** Constructor ***************************************
     public Main(final Runtime runtime) {
+        logger = Logger.getLogger(Main.class.getName());
+
         if (!Files.exists(cracFilesFolder)) {
             try {
-                System.out.println("Creating " + CRAC_FILES);
+                logger.info("Creating " + CRAC_FILES);
                 Files.createDirectory(cracFilesFolder);
             } catch (IOException e) {
-                System.out.println("Error creating " + CRAC_FILES + ". " + e);
+                logger.info("Error creating " + CRAC_FILES + ". " + e);
             }
         }
 
         try {
             createCheckpoint = isEmpty(cracFilesFolder);
         } catch (IOException e) {
-            System.out.println("Error checking crac-files folder");
+            logger.info("Error checking crac-files folder");
         }
 
-        runtime.addShutdownHook(new Thread(() -> System.out.println("App stopped in shutdown hook")));
+        runtime.addShutdownHook(new Thread(() -> logger.info("App stopped in shutdown hook")));
 
         final long initialCleanDelay = PropertyManager.INSTANCE.getLong(Constants.INITIAL_CACHE_CLEAN_DELAY, 50);
         final long cacheTimeout      = PropertyManager.INSTANCE.getLong(Constants.CACHE_TIMEOUT, 12);
@@ -82,7 +86,7 @@ public class Main implements Resource {
         start           = System.nanoTime();
 
         // Register this class as resource in the global context of CRaC
-        System.out.println("Register Resource: Main");
+        logger.info("Register Resource: Main");
         Core.getGlobalContext().register(Main.this);
 
         final long interval = PropertyManager.INSTANCE.getLong(Constants.INTERVAL, 5);
@@ -92,9 +96,9 @@ public class Main implements Resource {
 
     // ******************** Methods *******************************************
     @Override public void beforeCheckpoint(Context<? extends Resource> context) throws Exception {
-        System.out.println("Application warmup time: " + ((System.nanoTime() - start) / 1_000_000_000) + " sec");
+        logger.info("Application warmup time: " + ((System.nanoTime() - start) / 1_000_000_000) + " sec");
 
-        System.out.println("beforeCheckpoint() called in Main");
+        logger.info("beforeCheckpoint() called in Main");
         // Free resources or stop services
         executorService.shutdown();
         executorService.awaitTermination(5, TimeUnit.SECONDS);
@@ -102,7 +106,7 @@ public class Main implements Resource {
     }
 
     @Override public void afterRestore(Context<? extends Resource> context) throws Exception {
-        System.out.println("afterRestore() called in Main");
+        logger.info("afterRestore() called in Main");
         // Restore resources or re-start services
         final long interval = PropertyManager.INSTANCE.getLong(Constants.INTERVAL, 5);
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -114,16 +118,17 @@ public class Main implements Resource {
         for (long i = 1 ; i <= 100_000 ; i++) {
             isPrime(RND.nextInt(100_000));
         }
-        System.out.println(counter + ". Run: " + ((System.nanoTime() - start) / 1_000_000 + " ms (" + primeCache.size() + " elements cached, " + String.format(Locale.US, "%.1f%%", primeCache.size() / 1_000.0) + ")"));
+        logger.info(counter + ". Run: " + ((System.nanoTime() - start) / 1_000_000 + " ms (" + primeCache.size() + " elements cached, " + String.format(Locale.US, "%.1f%%", primeCache.size() / 1_000.0) + ")"));
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
             if (17 == counter) {
                 executorService.shutdownNow();
                 try {
+                    logger.info("Creating checkpoint from code");
                     Core.checkpointRestore();
                 } catch (CheckpointException | RestoreException e) {
-                    System.out.println("Error creating checkpoint " + e);
+                    logger.info("Error creating checkpoint " + e);
                 }
             }
         }
