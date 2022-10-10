@@ -122,7 +122,7 @@ public class Main implements Resource {
                 executorService.shutdownNow();
                 try {
                     Core.checkpointRestore();
-                } catch (CheckpointException e) {
+                } catch (CheckpointException | RestoreException e) {
                     System.out.println("Error creating checkpoint " + e);
                 }
             }
