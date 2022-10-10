@@ -27,8 +27,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      -name: Run jar file
-       run: java -XX:CRaCCheckpointTo=/opt/crac-files -jar build/libs/crac5-17.0.0.jar
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
       #  with:
