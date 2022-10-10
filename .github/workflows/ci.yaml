@@ -21,10 +21,10 @@ jobs:
       #- run: java -cp java HelloWorldApp
       - run: java -version
 
-      #- name: Grant execute permission for gradlew
-      #  run: chmod +x ./gradlew
-      #- name: Build with Gradle
-      #  run: ./gradlew build
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
       #  with:
