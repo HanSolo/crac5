@@ -15,7 +15,7 @@ jobs:
         with:
           distribution: 'jdkfile'
           jdkFile: ${{ runner.temp }}/java_package.tar.gz
-          java-version: '17.0.2'
+          java-version: '17.0.3+CRaC'
           architecture: x64
 
       #- run: java -cp java HelloWorldApp
@@ -32,7 +32,7 @@ jobs:
         run: docker build . --file Dockerfile --tag crac5
 
       - name: Run Docker container
-        run: docker run -it --privileged --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-17.0.0.jar'
+        run: docker run -it --privileged -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-17.0.0.jar'
 
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
