@@ -120,7 +120,11 @@ public class Main implements Resource {
         if (createCheckpoint) {
             if (17 == counter) {
                 executorService.shutdownNow();
-                Core.checkpointRestore();
+                try {
+                    Core.checkpointRestore();
+                } catch (CheckpointException e) {
+                    System.out.println("Error creating checkpoint " + e);
+                }
             }
         }
         counter++;
