@@ -144,16 +144,17 @@ public class Main implements Resource {
 
     private void checkpoint() {
         try {
-            final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
-            final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
-            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
-            processBuilder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Core.checkpointRestore();
+        } catch (CheckpointException | RestoreException e1) {
+            e1.printStackTrace();
+
             try {
-                Core.checkpointRestore();
-            } catch (CheckpointException | RestoreException e1) {
-                e1.printStackTrace();
+                final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
+                final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
+                final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
+                processBuilder.start();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
