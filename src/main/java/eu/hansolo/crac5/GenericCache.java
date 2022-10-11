@@ -103,7 +103,7 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
 
     public int size() { return map.size(); }
 
-    public boolean shutdown() {
+    public boolean shutdown() throws InterruptedException {
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {

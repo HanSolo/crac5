@@ -123,8 +123,12 @@ public class Main implements Resource {
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
             if (17 == counter) {
-                primeCache.shutdown();
-                shutdown();
+                try {
+                    primeCache.shutdown();
+                    shutdown();
+                } catch (InterruptedException e) {
+                    System.out.println("Error shut down executor services");
+                }
                 try {
                     System.out.println("Creating checkpoint from code");
                     Core.checkpointRestore();
@@ -137,7 +141,7 @@ public class Main implements Resource {
         counter++;
     }
 
-    private boolean shutdown() {
+    private boolean shutdown() throws InterruptedException {
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
