@@ -150,6 +150,11 @@ public class Main implements Resource {
             processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                Core.checkpointRestore();
+            } catch (CheckpointException | RestoreException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
