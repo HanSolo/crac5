@@ -4,7 +4,9 @@ import jdk.crac.*;
 //import org.crac.*;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Logger;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
@@ -17,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -124,17 +127,7 @@ public class Main implements Resource {
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
-            if (17 == counter) {
-                new Thread(() -> {
-                    try {
-                        System.out.println("Creating checkpoint from code");
-                        Core.checkpointRestore();
-                    } catch (CheckpointException | RestoreException e) {
-                        System.out.println("Error creating checkpoint");
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
+            if (17 == counter) { checkpoint(); }
         }
         counter++;
     }
@@ -151,6 +144,17 @@ public class Main implements Resource {
         }
         primeCache.put(number, isPrime);
         return isPrime;
+    }
+
+    private void checkpoint() {
+        try {
+            final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
+            final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
+            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isEmpty(final Path path) throws IOException {
