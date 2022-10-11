@@ -125,13 +125,15 @@ public class Main implements Resource {
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
             if (17 == counter) {
-                try {
-                    System.out.println("Creating checkpoint from code");
-                    Core.checkpointRestore();
-                } catch (CheckpointException | RestoreException e) {
-                    System.out.println("Error creating checkpoint");
-                    e.printStackTrace();
-                }
+                new Thread(() -> {
+                    try {
+                        System.out.println("Creating checkpoint from code");
+                        Core.checkpointRestore();
+                    } catch (CheckpointException | RestoreException e) {
+                        System.out.println("Error creating checkpoint");
+                        e.printStackTrace();
+                    }
+                }).start();
             }
         }
         counter++;
