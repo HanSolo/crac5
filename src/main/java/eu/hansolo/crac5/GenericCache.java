@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,7 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
     private                long                     checkpointAt;
     private                Runnable                 task;
     private                ScheduledExecutorService executorService;
+    private                ScheduledFuture<?>       future;
 
 
     // ******************** Constructors **************************************
@@ -58,7 +60,7 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
         Core.getGlobalContext().register(GenericCache.this);
 
         // Start the executor service that calls clean() every second
-        this.executorService.scheduleAtFixedRate(task, initialDelay, INTERVAL, TimeUnit.SECONDS);
+        future = executorService.scheduleAtFixedRate(task, initialDelay, INTERVAL, TimeUnit.SECONDS);
     }
 
 
@@ -68,6 +70,7 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
         checkpointAt = Instant.now().getEpochSecond();
         // Free resources or stop services
         if (!executorService.isTerminated()) {
+            future.cancel(false);
             executorService.shutdown();
             executorService.awaitTermination(10, TimeUnit.SECONDS);
         }

@@ -4,6 +4,7 @@ import jdk.crac.*;
 //import org.crac.*;
 
 import java.io.IOException;
+import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
@@ -51,6 +52,7 @@ public class Main implements Resource {
     private              int                         counter;
     private              Runnable                    task;
     private              ScheduledExecutorService    executorService;
+    private              ScheduledFuture<?>          future;
     private              long                        start;
 
 
@@ -89,7 +91,7 @@ public class Main implements Resource {
         Core.getGlobalContext().register(Main.this);
 
         final long interval = PropertyManager.INSTANCE.getLong(Constants.INTERVAL, 5);
-        executorService.scheduleAtFixedRate(task, 0, interval, TimeUnit.SECONDS);
+        future = executorService.scheduleAtFixedRate(task, 0, interval, TimeUnit.SECONDS);
     }
 
 
@@ -100,6 +102,7 @@ public class Main implements Resource {
         System.out.println("beforeCheckpoint() called in Main");
         // Free resources or stop services
         if (!executorService.isTerminated()) {
+            future.cancel(false);
             executorService.shutdown();
             executorService.awaitTermination(5, TimeUnit.SECONDS);
         }
