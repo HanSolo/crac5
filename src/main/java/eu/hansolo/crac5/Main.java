@@ -100,8 +100,10 @@ public class Main implements Resource {
 
         System.out.println("beforeCheckpoint() called in Main");
         // Free resources or stop services
-        executorService.shutdown();
-        executorService.awaitTermination(5, TimeUnit.SECONDS);
+        if (!executorService.isTerminated()) {
+            executorService.shutdown();
+            executorService.awaitTermination(5, TimeUnit.SECONDS);
+        }
         executorService = null;
     }
 
