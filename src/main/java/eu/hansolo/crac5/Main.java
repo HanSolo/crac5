@@ -123,17 +123,34 @@ public class Main implements Resource {
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
             if (17 == counter) {
-                executorService.shutdownNow();
-                try {
-                    System.out.println("Creating checkpoint from code");
-                    Core.checkpointRestore();
-                } catch (CheckpointException | RestoreException e) {
-                    System.out.println("Error creating checkpoint");
-                    e.printStackTrace();
+                boolean cacheShutDown = primeCache.shutdown();
+                boolean mainShutdown  = shutdown();
+                if (cacheShutDown && mainShutdown) {
+                    try {
+                        System.out.println("Creating checkpoint from code");
+                        Core.checkpointRestore();
+                    } catch (CheckpointException | RestoreException e) {
+                        System.out.println("Error creating checkpoint");
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Failed to shutdown executor services in cache and main");
                 }
             }
         }
         counter++;
+    }
+
+    private boolean shutdown() {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
+        return executorService.isTerminated();
     }
 
     private boolean isPrime(final long number) {
