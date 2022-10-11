@@ -126,34 +126,15 @@ public class Main implements Resource {
         if (createCheckpoint) {
             if (17 == counter) {
                 try {
-                    primeCache.shutdown();
-                    shutdown();
-                } catch (InterruptedException e) {
-                    System.out.println("Error shut down executor services");
-                }
-                try {
                     System.out.println("Creating checkpoint from code");
                     Core.checkpointRestore();
-                } catch (CheckpointException | RestoreException e) {
+                } catch (InterruptedException | CheckpointException | RestoreException e) {
                     System.out.println("Error creating checkpoint");
                     e.printStackTrace();
                 }
             }
         }
         counter++;
-    }
-
-    private boolean shutdown() throws InterruptedException {
-        executorService.shutdown();
-        try {
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
-                executorService.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executorService.shutdownNow();
-            executorService.awaitTermination(10, TimeUnit.SECONDS);
-        }
-        return executorService.isTerminated();
     }
 
     private boolean isPrime(final long number) {

@@ -105,19 +105,6 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
 
     public int size() { return map.size(); }
 
-    public boolean shutdown() throws InterruptedException {
-        executorService.shutdown();
-        try {
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
-                executorService.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executorService.shutdownNow();
-            executorService.awaitTermination(10, TimeUnit.SECONDS);
-        }
-        return executorService.isTerminated();
-    }
-
     protected Set<K> getExpiredKeys() {
         final long now = Instant.now().getEpochSecond();
         return this.map.keySet().parallelStream()
