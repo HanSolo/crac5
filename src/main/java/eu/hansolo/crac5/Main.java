@@ -3,10 +3,7 @@ package eu.hansolo.crac5;
 import jdk.crac.*;
 //import org.crac.*;
 
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Logger;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
@@ -19,7 +16,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
