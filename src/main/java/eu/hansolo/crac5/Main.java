@@ -82,7 +82,17 @@ public class Main implements Resource {
 
         primeCache      = new GenericCache<>(initialCleanDelay, cacheTimeout);
         counter         = 1;
-        task            = () -> checkForPrimes();
+        task            = () -> {
+            if (Thread.interrupted()) {
+                try {
+                    throw new InterruptedException();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            checkForPrimes();
+        };
         executorService = Executors.newSingleThreadScheduledExecutor();
         start           = System.nanoTime();
 
@@ -102,7 +112,7 @@ public class Main implements Resource {
         System.out.println("beforeCheckpoint() called in Main");
         // Free resources or stop services
         if (!executorService.isTerminated()) {
-            future.cancel(false);
+            future.cancel(true);
             executorService.shutdown();
             executorService.awaitTermination(5, TimeUnit.SECONDS);
         }

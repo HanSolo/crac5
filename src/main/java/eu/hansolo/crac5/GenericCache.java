@@ -50,7 +50,17 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
         this(DEFAULT_CACHE_DELAY, DEFAULT_CACHE_TIMEOUT);
     }
     public GenericCache(final long initialDelay, final long cacheTimeout) {
-        this.task            = () -> clean();
+        this.task            = () -> {
+            if (Thread.interrupted()) {
+                try {
+                    throw new InterruptedException();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            clean();
+        };
         this.executorService = Executors.newSingleThreadScheduledExecutor();
         this.cacheTimeout    = cacheTimeout;
         this.clear();
@@ -70,7 +80,7 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
         checkpointAt = Instant.now().getEpochSecond();
         // Free resources or stop services
         if (!executorService.isTerminated()) {
-            future.cancel(false);
+            future.cancel(true);
             executorService.shutdown();
             executorService.awaitTermination(10, TimeUnit.SECONDS);
         }
