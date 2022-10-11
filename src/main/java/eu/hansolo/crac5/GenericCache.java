@@ -80,9 +80,10 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
         checkpointAt = Instant.now().getEpochSecond();
         // Free resources or stop services
         if (!executorService.isTerminated()) {
-            future.cancel(true);
+            if (!future.isCancelled()) { future.cancel(true); }
             executorService.shutdown();
             executorService.awaitTermination(10, TimeUnit.SECONDS);
+            if (!executorService.isTerminated()) { executorService.shutdownNow(); }
         }
         executorService = null;
     }

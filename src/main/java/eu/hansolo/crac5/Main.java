@@ -112,9 +112,10 @@ public class Main implements Resource {
         System.out.println("beforeCheckpoint() called in Main");
         // Free resources or stop services
         if (!executorService.isTerminated()) {
-            future.cancel(true);
+            if (!future.isCancelled()) { future.cancel(true); }
             executorService.shutdown();
             executorService.awaitTermination(5, TimeUnit.SECONDS);
+            if (!executorService.isTerminated()) { executorService.shutdownNow(); }
         }
         executorService = null;
     }
@@ -158,18 +159,20 @@ public class Main implements Resource {
     private void checkpoint() {
         try {
             Core.checkpointRestore();
-        } catch (CheckpointException | RestoreException e1) {
-            e1.printStackTrace();
-
-            try {
-                final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
-                final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
-                final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
-                processBuilder.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (CheckpointException | RestoreException e) {
+            e.printStackTrace();
         }
+
+        /*
+        try {
+            final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
+            final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
+            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
     }
 
     public boolean isEmpty(final Path path) throws IOException {
