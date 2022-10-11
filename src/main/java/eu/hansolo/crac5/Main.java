@@ -128,7 +128,7 @@ public class Main implements Resource {
                 try {
                     System.out.println("Creating checkpoint from code");
                     Core.checkpointRestore();
-                } catch (InterruptedException | CheckpointException | RestoreException e) {
+                } catch (CheckpointException | RestoreException e) {
                     System.out.println("Error creating checkpoint");
                     e.printStackTrace();
                 }
