@@ -123,18 +123,14 @@ public class Main implements Resource {
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
             if (17 == counter) {
-                boolean cacheShutDown = primeCache.shutdown();
-                boolean mainShutdown  = shutdown();
-                if (cacheShutDown && mainShutdown) {
-                    try {
-                        System.out.println("Creating checkpoint from code");
-                        Core.checkpointRestore();
-                    } catch (CheckpointException | RestoreException e) {
-                        System.out.println("Error creating checkpoint");
-                        e.printStackTrace();
-                    }
-                } else {
-                    System.out.println("Failed to shutdown executor services in cache and main");
+                primeCache.shutdown();
+                shutdown();
+                try {
+                    System.out.println("Creating checkpoint from code");
+                    Core.checkpointRestore();
+                } catch (CheckpointException | RestoreException e) {
+                    System.out.println("Error creating checkpoint");
+                    e.printStackTrace();
                 }
             }
         }
@@ -144,11 +140,12 @@ public class Main implements Resource {
     private boolean shutdown() {
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
             executorService.shutdownNow();
+            executorService.awaitTermination(10, TimeUnit.SECONDS);
         }
         return executorService.isTerminated();
     }

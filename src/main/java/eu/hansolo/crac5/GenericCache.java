@@ -106,11 +106,12 @@ public class GenericCache<K, V> implements Resource, Cache<K, V> {
     public boolean shutdown() {
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
             executorService.shutdownNow();
+            executorService.awaitTermination(10, TimeUnit.SECONDS);
         }
         return executorService.isTerminated();
     }
