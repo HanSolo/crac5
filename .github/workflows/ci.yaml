@@ -12,7 +12,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
-          java-package: jre+crac
+          java-package: jdk+crac
           architecture: x64
 
       #- run: java -cp java HelloWorldApp
