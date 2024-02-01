@@ -1,7 +1,7 @@
 package eu.hansolo.crac5;
 
-import jdk.crac.*;
-//import org.crac.*;
+//import jdk.crac.*;
+import org.crac.*;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledFuture;

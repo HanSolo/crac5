@@ -5,14 +5,17 @@ on: [push]
 
 jobs:
   CRaC5:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/setup-java@v4
+      - run: |
+          download_url="https://github.com/CRaC/openjdk-builds/releases/download/17-crac%2B3/openjdk-17-crac+3_linux-x64.tar.gz"
+          wget -O $RUNNER_TEMP/java_package.tar.gz $download_url
+      - uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '21'
-          java-package: jre+crac
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/java_package.tar.gz
+          java-version: '17.0.3+CRaC'
           architecture: x64
 
       #- run: java -cp java HelloWorldApp
@@ -25,10 +28,11 @@ jobs:
         run: ./gradlew build
 
       - name: Build the Docker image
+        #run: docker build . --file Dockerfile --tag crac5:$(date +%s)
         run: docker build . --file Dockerfile --tag crac5
 
       - name: Run Docker container
-        run: docker run --privileged -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
+        run: docker run --privileged -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-17.0.0.jar'
 
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
