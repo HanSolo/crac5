@@ -163,6 +163,7 @@ public class Main implements Resource {
     }
 
     private void checkpoint() {
+        /*
         try {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
@@ -172,13 +173,13 @@ public class Main implements Resource {
         } catch (RestoreException e) {
             System.out.println("Error restoring checkpoint: " + e.getMessage());
         }
+        */
 
         try {
             System.out.println("Create checkpoint using checkpoint.sh");
             final String         checkpointsh   = new StringBuilder().append("checkpoint.sh").toString();
             final String[]       checkpointJcmd = { "/bin/sh", "-c", checkpointsh };
             final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
-            System.out.println("CMD to execute: /bin/sh -c " + checkpointJcmd);
             processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
