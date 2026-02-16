@@ -139,13 +139,11 @@ public class Main implements Resource {
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
-            /*
             if (10 == counter) {
                 checkpoint();
-                executorService.shutdown();
-                System.out.println("Executor shutdown");
+                //executorService.shutdown();
+                //System.out.println("Executor shutdown");
             }
-            */
         }
         counter++;
     }
@@ -175,6 +173,16 @@ public class Main implements Resource {
             System.out.println("Error restoring checkpoint: " + e.getMessage());
         }
 
+        try {
+            System.out.println("Create checkpoint using checkpoint.sh");
+            final String         checkpointsh   = new StringBuilder().append("checkpoint.sh").toString();
+            final String[]       checkpointJcmd = { "/bin/sh", "-c", checkpointsh };
+            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
+            System.out.println("CMD to execute: /bin/sh -c " + checkpointJcmd);
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         /*
         try {
