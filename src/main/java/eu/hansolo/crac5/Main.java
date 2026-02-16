@@ -6,6 +6,7 @@ import org.crac.CheckpointException;
 import org.crac.Core;
 import org.crac.RestoreException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
@@ -87,9 +88,12 @@ public class Main implements Resource {
         counter         = 1;
         task            = () -> {
             if (Thread.interrupted()) {
+                System.out.println("Current thread interrupted");
                 try {
-                    throw new InterruptedException();
-                } catch (InterruptedException e) {
+                    executorService.shutdown();
+                    System.out.println("Current thread interrupted, shutdown executor service");
+                    return;
+                } catch (Exception e) {
                     Thread.currentThread().interrupt();
                     return;
                 }
@@ -140,7 +144,13 @@ public class Main implements Resource {
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
-            if (17 == counter) { checkpoint(); }
+            if (17 == counter) {
+                checkpoint();
+                // How to store checkpoint outside of contaienr???
+
+                // Shutdown JVM
+                System.exit(0);
+            }
         }
         counter++;
     }
@@ -163,6 +173,7 @@ public class Main implements Resource {
         try {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
+            System.out.println("Checkpoint created: " + (new File(CRAC_FILES).listFiles().length > 0));
         } catch (CheckpointException | RestoreException e) {
             e.printStackTrace();
         }
