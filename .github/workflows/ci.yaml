@@ -22,7 +22,7 @@ jobs:
         run: ./gradlew build
 
       - name: Upload jar
-        run: mkdir staging && cp /build/libs/crac5-21.0.0.jar staging
+        run: mkdir staging && cp build/libs/crac5-21.0.0.jar staging
       - uses: actions/upload-artifact@v4
         with:
           name: Package
