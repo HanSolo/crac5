@@ -28,7 +28,8 @@ jobs:
         run: docker build . --file Dockerfile --tag crac5
 
       - name: Run Docker container
-        run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCEngineOptions='compression=true' -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
+        run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
+        #run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCEngineOptions='compression=true' -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
 
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1

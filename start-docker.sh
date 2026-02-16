@@ -10,11 +10,11 @@ if [ -d "/opt/crac-files" ]; then
     java -XX:CRaCRestoreFrom=/opt/crac-files
   else
     echo "Standard start from jar file"
-    java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
+    java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
   fi
 else
   echo "No crac-files folder found"
   mkdir /opt/crac-files
   echo "Standard start from jar file"
-  java -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
+  java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
 fi
