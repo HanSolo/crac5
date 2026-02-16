@@ -177,7 +177,7 @@ public class Main implements Resource {
 
         try {
             System.out.println("Create checkpoint using checkpoint.sh");
-            final String         checkpointsh   = new StringBuilder().append("checkpoint.sh").toString();
+            final String         checkpointsh   = new StringBuilder().append("/opt/app/checkpoint.sh").toString();
             final String[]       checkpointJcmd = { "/bin/sh", "-c", checkpointsh };
             final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
             processBuilder.start();
