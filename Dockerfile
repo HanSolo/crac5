@@ -5,7 +5,7 @@ RUN mkdir -p /opt/crac-files
 COPY build/libs/crac5-25.0.0.jar /opt/app/crac5-25.0.0.jar
 #RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -XX:CPUFeatures=ignore -jar /opt/app/crac5-25.0.0.jar
 
-CMD java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -XX:CPUFeatures=ignore -jar /opt/app/crac5-25.0.0.jar
+RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -XX:CPUFeatures=ignore -jar /opt/app/crac5-25.0.0.jar
 CMD sleep 90; jcmd /opt/app/crac5-25.0.0.jar JDK.checkpoint
 
 # Runtime stge
