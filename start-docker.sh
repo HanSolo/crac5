@@ -21,4 +21,4 @@ echo "$(date +'%H:%M:%S.%3N') Call jar file"
 
 echo "start-docker.sh"
 java -version
-java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/crac-files -jar crac5-21.0.0.jar
+java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/crac-files -jar ./crac5-21.0.0.jar
