@@ -158,6 +158,7 @@ public class Main implements Resource {
 
     private void checkpoint() {
         try {
+            System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
         } catch (CheckpointException | RestoreException e) {
             e.printStackTrace();
