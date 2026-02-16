@@ -4,7 +4,7 @@ RUN apt-get update -y
 RUN mkdir -p /opt/crac-files
 COPY build/libs/crac5-21.0.0.jar /opt/app/crac5-21.0.0.jar
 #RUN java -XX:CRaCEngine=warp -XX:CPUFeatures=generic -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
-RUN java -XX:CRaCEngine=warp -XX:+UnlockExperimentalVMOptions -XX:+IgnoreCPUFeatures -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar
+RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -XX:CPUFeatures=ignore -jar /opt/app/crac5-21.0.0.jar
 
 # Runtime stge
 FROM azul/zulu-openjdk:21-jdk-crac-latest
