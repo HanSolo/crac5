@@ -1,7 +1,7 @@
 #FROM ubuntu:20.04
 FROM azul/zulu-openjdk:21-jdk-crac-latest
 
-ENV JAVA_HOME /opt/jdk
+#ENV JAVA_HOME /opt/jdk
 ENV PATH $JAVA_HOME/bin:$PATH
 
 RUN apt-get update -y
