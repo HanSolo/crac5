@@ -142,6 +142,7 @@ public class Main implements Resource {
             if (10 == counter) {
                 checkpoint();
                 executorService.shutdown();
+                System.out.println("Executor shutdown");
             }
         }
         counter++;
@@ -166,8 +167,10 @@ public class Main implements Resource {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
             System.out.println("Checkpoint created: " + (new File(CRAC_FILES).listFiles().length > 0));
-        } catch (CheckpointException | RestoreException e) {
-            System.out.println("Error creating checkpoint: " + e);
+        } catch (CheckpointException e) {
+            System.out.println("Error creating checkpoint: " + e.getMessage());
+        } catch (RestoreException e) {
+            System.out.println("Error restoring checkpoint: " + e.getMessage());
         }
 
 
