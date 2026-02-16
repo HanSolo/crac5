@@ -11,7 +11,7 @@ RUN mkdir -p /opt/crac-files
 
 COPY build/libs/crac5-21.0.0.jar /opt/app/crac5-21.0.0.jar
 
-COPY start-docker.sh /opt/app/start-docker.sh
+COPY ./start-docker.sh /opt/app/start-docker.sh
 
 #CMD ["docker exec -it -u root crac5 java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar"]
 
