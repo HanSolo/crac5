@@ -141,8 +141,7 @@ public class Main implements Resource {
         if (createCheckpoint) {
             if (10 == counter) {
                 checkpoint();
-                // Shutdown JVM
-                System.exit(0);
+                executorService.shutdown();
             }
         }
         counter++;
