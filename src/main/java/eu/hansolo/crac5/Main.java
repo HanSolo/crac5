@@ -139,11 +139,13 @@ public class Main implements Resource {
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
+            /*
             if (10 == counter) {
                 checkpoint();
                 executorService.shutdown();
                 System.out.println("Executor shutdown");
             }
+            */
         }
         counter++;
     }
