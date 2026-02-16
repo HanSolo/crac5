@@ -174,7 +174,7 @@ public class Main implements Resource {
             Core.checkpointRestore();
             System.out.println("Checkpoint created: " + (new File(CRAC_FILES).listFiles().length > 0));
         } catch (CheckpointException | RestoreException e) {
-            e.printStackTrace();
+            System.out.println("Error creating checkpoint: " + e);
         }
 
         /*

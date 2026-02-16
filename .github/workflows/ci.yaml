@@ -15,7 +15,6 @@ jobs:
           java-package: jdk+crac
           architecture: x64
 
-      #- run: java -cp java HelloWorldApp
       - run: java -version
 
       - uses: actions/checkout@v3
@@ -27,9 +26,11 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag crac5
 
-      - name: Run Docker container
-        run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
-        #run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCEngineOptions='compression=true' -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
+     # - name: Run Docker container
+     #   run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
+
+      - name: Run start.sh script
+        run: bash /opt/app/start-docker.sh
 
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
