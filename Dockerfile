@@ -9,5 +9,5 @@ RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/
 FROM azul/zulu-openjdk:21-jdk-crac-latest
 COPY --from=builder /opt/app/crac5-21.0.0.jar .
 COPY --from=builder /opt/crac-files/.* ./crac-files
-CMD ["java -XX:CRaCCheckpointFrom=/crac-files"]
-#CMD [""]
+RUN java -XX:CRaCRestoreFrom=./crac-files
+#CMD ["java -XX:CRaCCheckpointFrom=/crac-files"]
