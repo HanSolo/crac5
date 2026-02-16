@@ -44,7 +44,7 @@ import java.util.stream.Stream;
  * This log file can be analyzed by using JITWatch
  */
 public class Main implements Resource {
-    public  static final int                         DEFAULT_INTERVAL = 3;
+    public  static final int                         DEFAULT_INTERVAL = 2;
     private static final Random                      RND              = new Random();
     private static final String                      CRAC_FILES       = "/opt/crac-files";
     private static final DateTimeFormatter           FORMATTER        = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
@@ -141,8 +141,6 @@ public class Main implements Resource {
         if (createCheckpoint) {
             if (10 == counter) {
                 checkpoint();
-                // How to store checkpoint outside of contaienr???
-
                 // Shutdown JVM
                 System.exit(0);
             }
@@ -165,6 +163,7 @@ public class Main implements Resource {
     }
 
     private void checkpoint() {
+        /*
         try {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
@@ -172,8 +171,9 @@ public class Main implements Resource {
         } catch (CheckpointException | RestoreException e) {
             System.out.println("Error creating checkpoint: " + e);
         }
+        */
 
-        /*
+
         try {
             final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
             final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
@@ -182,7 +182,6 @@ public class Main implements Resource {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
     }
 
     public boolean isEmpty(final Path path) throws IOException {
