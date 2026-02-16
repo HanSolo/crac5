@@ -176,17 +176,6 @@ public class Main implements Resource {
         */
 
         try {
-            System.out.println("Create checkpoint using checkpoint.sh");
-            final String         checkpointsh   = new StringBuilder().append("/opt/app/checkpoint.sh").toString();
-            final String[]       checkpointJcmd = { "/bin/sh", "-c", checkpointsh };
-            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
-            processBuilder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        /*
-        try {
             System.out.println("Create checkpoint using JCMD");
             final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
             final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
@@ -196,7 +185,6 @@ public class Main implements Resource {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
     }
 
     public boolean isEmpty(final Path path) throws IOException {

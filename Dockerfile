@@ -3,8 +3,6 @@ FROM azul/zulu-openjdk:25-jdk-crac-latest AS builder
 RUN apt-get update -y
 RUN mkdir -p /opt/crac-files
 COPY build/libs/crac5-25.0.0.jar /opt/app/crac5-25.0.0.jar
-COPY checkpoint.sh /opt/app/checkpoint.sh
-
 
 #CMD sleep 30; jcmd /opt/app/crac5-25.0.0.jar JDK.checkpoint
 RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -XX:CPUFeatures=ignore -jar /opt/app/crac5-25.0.0.jar
