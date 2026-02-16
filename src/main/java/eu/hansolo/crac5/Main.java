@@ -9,7 +9,6 @@ import org.crac.RestoreException;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Logger;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,13 +44,12 @@ import java.util.stream.Stream;
  * This log file can be analyzed by using JITWatch
  */
 public class Main implements Resource {
-    public  static final int                         DEFAULT_INTERVAL = 5;
+    public  static final int                         DEFAULT_INTERVAL = 3;
     private static final Random                      RND              = new Random();
     private static final String                      CRAC_FILES       = "/opt/crac-files";
     private static final DateTimeFormatter           FORMATTER        = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private        final Path                        cracFilesFolder  = Paths.get(CRAC_FILES);
     private        final GenericCache<Long, Boolean> primeCache;
-    private        final Logger                      logger;
     private              boolean                     createCheckpoint = false;
     private              int                         counter;
     private              Runnable                    task;
@@ -62,8 +60,6 @@ public class Main implements Resource {
 
     // ******************** Constructor ***************************************
     public Main(final Runtime runtime) {
-        logger = Logger.getLogger(Main.class.getName());
-
         if (!Files.exists(cracFilesFolder)) {
             try {
                 System.out.println("Creating " + CRAC_FILES);
