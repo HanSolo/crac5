@@ -6,7 +6,7 @@ plugins {
     id 'net.nemerosa.versioning' version '3.0.0'
 }
 
-description = 'CRaC 5 demo'
+description = 'CRaC 5 Demo'
 
 Date buildTimeAndDate = new Date()
 ext {
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.crac:crac:1.4.0'
+    implementation 'org.crac:crac:1.5.0'
 }
 
 compileJava {
@@ -43,8 +43,11 @@ jar {
                 'Specification-Version' : project.version,
                 'Implementation-Title'  : project.name,
                 'Main-Class'            : application.mainClass.get()
-
         )
+    }
+    // Create fat jar to make sure org.crac is available
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
