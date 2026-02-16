@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Output timestamp
 echo "$(date +'%H:%M:%S.%3N') Call jar file"

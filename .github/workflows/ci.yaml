@@ -30,7 +30,7 @@ jobs:
      #   run: docker run -t --rm --name crac5 crac5 /bin/bash -c 'java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/crac5-21.0.0.jar'
 
       - name: Run start.sh script
-        run: docker run /bin/bash -c '/opt/app/start-docker.sh'
+        run: sh /opt/app/start-docker.sh
 #
       #- name: Publish to docker hub
       #  uses: docker/build-push-action@v1
