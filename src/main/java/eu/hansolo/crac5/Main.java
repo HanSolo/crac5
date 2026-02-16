@@ -47,7 +47,7 @@ import java.util.stream.Stream;
 public class Main implements Resource {
     public  static final int                         DEFAULT_INTERVAL = 5;
     private static final Random                      RND              = new Random();
-    private static final String                      CRAC_FILES       = "/opt/crac-files";
+    private static final String                      CRAC_FILES       = "/crac-files";
     private static final DateTimeFormatter           FORMATTER        = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private        final Path                        cracFilesFolder  = Paths.get(CRAC_FILES);
     private        final GenericCache<Long, Boolean> primeCache;
