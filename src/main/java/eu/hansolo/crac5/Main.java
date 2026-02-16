@@ -175,12 +175,14 @@ public class Main implements Resource {
         }
         */
 
+
         try {
             System.out.println("Create checkpoint using JCMD");
             final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
-            final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
-            final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
-            System.out.println("CMD to execute: /bin/sh -c " + jcmd);
+            //final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
+            //final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
+            final ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("sh", "-c", "jcmd /opt/app/crac5-25.0.0.jar JDK.checkpoint");
             processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
