@@ -92,13 +92,12 @@ public class Main implements Resource {
                 try {
                     executorService.shutdown();
                     System.out.println("Current thread interrupted, shutdown executor service");
-                    return;
                 } catch (Exception e) {
                     Thread.currentThread().interrupt();
-                    return;
                 }
+            } else {
+                checkForPrimes();
             }
-            checkForPrimes();
         };
         executorService = Executors.newSingleThreadScheduledExecutor();
         start           = System.nanoTime();
@@ -144,7 +143,7 @@ public class Main implements Resource {
 
         // Create checkpoint after iteration 17
         if (createCheckpoint) {
-            if (17 == counter) {
+            if (10 == counter) {
                 checkpoint();
                 // How to store checkpoint outside of contaienr???
 

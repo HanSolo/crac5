@@ -4,8 +4,6 @@ FROM azul/zulu-openjdk:21-jdk-crac-latest
 #ENV JAVA_HOME /opt/jdk
 #ENV PATH $JAVA_HOME/bin:$PATH
 
-RUN echo java -version
-
 RUN apt-get update -y
 #ADD "https://github.com/CRaC/openjdk-builds/releases/download/121-crac%2B3/openjdk-21-crac+3_linux-x64.tar.gz" $JAVA_HOME/openjdk.tar.gz
 #RUN tar --extract --file $JAVA_HOME/openjdk.tar.gz --directory "$JAVA_HOME" --strip-components 1; rm $JAVA_HOME/openjdk.tar.gz;
