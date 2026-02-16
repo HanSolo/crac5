@@ -7,7 +7,9 @@ RUN java -XX:CRaCEngine=warp -XX:CRaCCheckpointTo=/opt/crac-files -jar /opt/app/
 
 # Runtime stge
 FROM azul/zulu-openjdk:21-jdk-crac-latest
+RUN apt-get update -y
+RUN mkdir -p /crac-files
 COPY --from=builder /opt/app/crac5-21.0.0.jar .
-COPY --from=builder /opt/crac-files/.* ./crac-files
-RUN java -XX:CRaCRestoreFrom=./crac-files
+COPY --from=builder /opt/crac-files/.* /crac-files
+RUN java -XX:CRaCRestoreFrom=/crac-files
 #CMD ["java -XX:CRaCCheckpointFrom=/crac-files"]
