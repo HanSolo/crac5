@@ -143,6 +143,8 @@ public class Main implements Resource {
                 checkpoint();
                 //executorService.shutdown();
                 //System.out.println("Executor shutdown");
+            } else if (20 == counter) {
+                System.exit(0);
             }
         }
         counter++;
@@ -163,6 +165,7 @@ public class Main implements Resource {
     }
 
     private void checkpoint() {
+        /*
         try {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
@@ -172,20 +175,20 @@ public class Main implements Resource {
         } catch (RestoreException e) {
             System.out.println("Error restoring checkpoint: " + e.getMessage());
         }
+        */
 
-        /*
+
         try {
             System.out.println("Create checkpoint using JCMD");
             final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
             //final String[]       checkpointJcmd = { "/bin/sh", "-c", jcmd };
             //final ProcessBuilder processBuilder = new ProcessBuilder(checkpointJcmd);
             final ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("sh", "-c", "jcmd /opt/app/crac5-25.0.0.jar JDK.checkpoint");
+            processBuilder.command("sh", "-c", "jcmd /opt/app/crac5-25.0.0.jar JDK.checkpoint || if [ $? -eq 137 ]; then return 0; else return 1; fi");
             processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
     }
 
     public boolean isEmpty(final Path path) throws IOException {
