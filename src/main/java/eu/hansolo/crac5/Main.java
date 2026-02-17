@@ -163,7 +163,6 @@ public class Main implements Resource {
     }
 
     private void checkpoint() {
-        /*
         try {
             System.out.println("Creating checkpoint...");
             Core.checkpointRestore();
@@ -173,9 +172,8 @@ public class Main implements Resource {
         } catch (RestoreException e) {
             System.out.println("Error restoring checkpoint: " + e.getMessage());
         }
-        */
 
-
+        /*
         try {
             System.out.println("Create checkpoint using JCMD");
             final String         jcmd           = new StringBuilder().append("jcmd").append(" ").append(ProcessHandle.current().pid()).append(" ").append("JDK.checkpoint").toString();
@@ -187,6 +185,7 @@ public class Main implements Resource {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 
     public boolean isEmpty(final Path path) throws IOException {

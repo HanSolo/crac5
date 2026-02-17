@@ -17,5 +17,5 @@ RUN apt-get update -y
 RUN mkdir -p /opt/crac-files
 COPY --from=builder /opt/app/crac5-25.0.0.jar /opt/app/crac5-25.0.0.jar
 COPY --from=builder /opt/crac-files/.* /opt/crac-files
-RUN java -XX:CRaCRestoreFrom=/opt/crac-files -XX:+CRaCIgnoreRestoreIfUnavailable -jar /opt/app/crac5-25.0.0.jar
+RUN java -XX:CRaCEngine=warp -XX:CRaCRestoreFrom=/opt/crac-files -XX:+CRaCIgnoreRestoreIfUnavailable -jar /opt/app/crac5-25.0.0.jar
 #CMD ["java -XX:CRaCCheckpointFrom=/crac-files"]
